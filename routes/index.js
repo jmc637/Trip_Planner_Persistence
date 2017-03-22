@@ -20,4 +20,23 @@ router.get('/', function(req, res, next) {
   .catch(next);
 });
 
+
+router.get('/api/options', function(req, res, next) {
+  Promise.all([
+    Hotel.findAll(),
+    Restaurant.findAll(),
+    Activity.findAll()
+  ])
+  .spread(function(dbHotels, dbRestaurants, dbActivities) {
+    var allData = {
+      dbHotels: dbHotels,
+      dbRestaurants: dbRestaurants,
+      dbActivities: dbActivities
+    }
+    res.json(allData);
+  })
+  .catch(next);
+});
+
+
 module.exports = router;

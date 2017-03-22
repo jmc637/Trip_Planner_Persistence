@@ -8,14 +8,31 @@
  */
 
 var attractionsModule = (function () {
+  
+  var enhanced;
 
   // application state
+  $.ajax({
+    method: 'GET',
+    url: '/api/options',
+  })
+  .then(function (responseData) {
+    // some code to run when the response comes back
+    restaurants = responseData.dbRestaurants;
+    hotels = responseData.dbHotels;
+    activities = responseData.dbActivities;  
+    var enhanced = {
+      hotels: hotels.map(attractionModule.create),
+      restaurants: restaurants.map(attractionModule.create),
+      activities: activities.map(attractionModule.create),
+    };
+  })
+  .catch(function (errorObj) {
+    // some code to run if the request errors out
+    console.error(errorObj);
+  });
 
-  var enhanced = {
-    hotels: hotels.map(attractionModule.create),
-    restaurants: restaurants.map(attractionModule.create),
-    activities: activities.map(attractionModule.create),
-  };
+
 
   // private helper methods (only available inside the module)
 
